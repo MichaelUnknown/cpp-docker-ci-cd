@@ -1,0 +1,6 @@
+/.vscode
+/.github
+/build*
+/cpm_modules
+LICENSE
+README.md

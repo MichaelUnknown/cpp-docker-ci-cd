@@ -1,0 +1,55 @@
+Language : Cpp
+BasedOnStyle : Google
+
+IndentWidth : 4
+ContinuationIndentWidth : 4
+SpacesBeforeTrailingComments : 4
+ColumnLimit : 140
+IndentPPDirectives : None
+
+AlignTrailingComments : true
+ReflowComments : false
+
+NamespaceIndentation : All
+FixNamespaceComments : true
+
+DerivePointerAlignment : false
+PointerAlignment : Left
+
+AllowShortFunctionsOnASingleLine : Inline
+
+AlignAfterOpenBracket : Align
+AlignConsecutiveAssignments : false
+AllowShortIfStatementsOnASingleLine : false
+AllowShortBlocksOnASingleLine : false
+AllowShortLoopsOnASingleLine : false
+Cpp11BracedListStyle : true
+BreakBeforeConceptDeclarations : true
+IndentRequires : true
+EmptyLineBeforeAccessModifier : Always
+# ArrayInitializerAlignmentStyle : Right
+# LambdaBodyIndentation : Signature
+
+BreakBeforeBraces : Custom
+BraceWrapping :
+  AfterClass : true
+  AfterControlStatement : true
+  AfterEnum : true
+  AfterFunction : true
+  AfterNamespace : true
+  AfterStruct : true
+  AfterUnion : true
+  BeforeCatch : true
+  BeforeElse : true
+  IndentBraces : false
+
+SortUsingDeclarations: true
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '<(mkpoker)\/.*>'
+    Priority:        1
+  - Regex:           '<([A-Za-z0-9\/\-_])+>'
+    Priority:        2
+  - Regex:           '"([A-Za-z0-9.\/\-_])+"'
+    Priority:        3
