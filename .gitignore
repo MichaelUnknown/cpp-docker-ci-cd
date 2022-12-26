@@ -1,3 +1,7 @@
-/.vscode
-/build*
-/cpm_modules
+.vscode
+!.vscode/settings.json
+!.vscode/c_cpp_properties.json
+build*
+cpm_modules
+.vs/
+out/

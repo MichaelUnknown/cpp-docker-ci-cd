@@ -17,23 +17,69 @@ if(NOT Boost_FOUND)
   CPMAddPackage(
     NAME Boost
     GITHUB_REPOSITORY boostorg/boost
-    GIT_TAG boost-1.78.0
-    VERSION 1.78.0
+    GIT_TAG boost-1.81.0
+    VERSION 1.81.0
   )
+
   # Ugly workaround:
-  # Boost cmake support is still experimental, the Boost::boost target is not provided if downloaded via
-  # FetchContent_declare / CPM.cmake
-  # Crow uses it for asio, so we fake the Boost:boost target as asio
+  # Boost cmake support is still experimental, the Boost::headers / Boost::boost target
+  # is not provided if downloaded via FetchContent_declare / CPM.cmake
+  # so we add it manually
+
+  if(NOT TARGET Boost::headers)
+    message(STATUS "manually adding Boost::headers")
+
+    set(__boost_libs_dir "${Boost_SOURCE_DIR}/libs/")
+    file(GLOB __boost_all_components
+      LIST_DIRECTORIES true
+      RELATIVE "${__boost_libs_dir}"
+      "${__boost_libs_dir}/*/include")
+    file(GLOB __boost_all_components_num
+      LIST_DIRECTORIES true
+      RELATIVE "${__boost_libs_dir}"
+      "${__boost_libs_dir}/numeric/*/include")
+
+    foreach(__dir ${__boost_all_components})
+      set(__full_dir "${__boost_libs_dir}${__dir}")
+      #message(STATUS "full dir: ${__full_dir}")
+      list(APPEND __boost_all_includes ${__full_dir})
+    endforeach()
+    foreach(__dir ${__boost_all_components_num})
+      set(__full_dir "${__boost_libs_dir}${__dir}")
+      #message(STATUS "full num dir: ${__full_dir}")
+      list(APPEND __boost_all_includes ${__full_dir})
+    endforeach()
+
+    list(LENGTH __boost_all_includes __boost_all_includes_count)
+    message(STATUS "number of include dirs discovered: ${__boost_all_includes_count}")
+
+    # add target
+    add_library(Boost::headers INTERFACE IMPORTED)
+    set_target_properties(Boost::headers PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${__boost_all_includes}")
+    #get_target_property(xxx Boost::headers INTERFACE_INCLUDE_DIRECTORIES)
+    #foreach(xx ${xxx})
+    #  message(STATUS "Boost::headers includes: ${xx}")
+    #endforeach()
+  endif()
+
   if(NOT TARGET Boost::boost)
+    message(STATUS "manually adding Boost::boost")
     add_library(Boost::boost INTERFACE IMPORTED)
-    target_link_libraries(Boost::boost INTERFACE Boost::asio)
+    target_link_libraries(Boost::boost INTERFACE Boost::headers)
   endif()
 else()
   message(STATUS "WebAPI: Boost system lib found")
 endif()
-# add Crow
-CPMAddPackage("gh:CrowCpp/Crow#v1.0+1@1.0.1")
 
+# add Crow
+CPMAddPackage(
+  NAME Crow
+  GITHUB_REPOSITORY CrowCpp/Crow
+  GIT_TAG v1.0+5
+  VERSION 1.0.5
+  OPTIONS
+    "CROW_INSTALL OFF"
+)
 
 # the app
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
