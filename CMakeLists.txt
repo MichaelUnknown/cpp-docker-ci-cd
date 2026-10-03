@@ -75,8 +75,7 @@ endif()
 CPMAddPackage(
   NAME Crow
   GITHUB_REPOSITORY CrowCpp/Crow
-  GIT_TAG v1.0+5
-  VERSION 1.0.5
+  VERSION 1.3.4
   OPTIONS
     "CROW_INSTALL OFF"
 )
